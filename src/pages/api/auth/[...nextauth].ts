@@ -1,6 +1,9 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
 
+import { query as q } from "faunadb"
+import { fauna } from '../../../services/fauna'
+
 export default NextAuth({
   providers: [
     // OAuth authentication providers...
@@ -11,5 +14,43 @@ export default NextAuth({
     })
   ],
   // Optional SQL or MongoDB database to persist users
-  database: process.env.DATABASE_URL
+  database: process.env.DATABASE_URL,
+  callbacks: {
+    async signIn(user, account, profile) {
+      const { email } = user
+      console.log(user)
+
+      const createUser = q
+        .Create(
+          q.Collection("users"),
+          { data: { email } }
+        )
+
+      const userWithEmail = q.
+        Match(
+          q.Index("user_by_email"),
+          q.Casefold(user.email)
+        )
+
+      try {
+        await fauna.query(
+          q.If(
+            q.Not(
+              q.Exists(
+                userWithEmail
+              )
+            ),
+            createUser,
+            q.Get(
+              userWithEmail
+            )
+          )
+        )
+
+        return true
+      } catch {
+        return false
+      }
+    }
+  }
 })
