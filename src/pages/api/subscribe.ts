@@ -38,8 +38,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         // metadata
       })
 
-      customerId = stripeCustomer.id
-
       // save customer do faunaDb
       await fauna.query(
         q.Update(
@@ -51,6 +49,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           }
         )
       )
+
+      customerId = stripeCustomer.id
     }
 
     // create stripe checkout
