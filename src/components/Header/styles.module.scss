@@ -12,6 +12,15 @@
   display: flex;
   align-items: center;
 
+  img {
+    transition: filter 0.2s;
+  }
+
+  img:hover {
+    filter: brightness(1.2);
+    filter: blur(1px);
+  }
+
   nav {
     margin-left: 5rem;
     height: 5rem;

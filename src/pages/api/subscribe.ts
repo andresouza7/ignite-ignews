@@ -49,7 +49,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           }
         )
       )
-
+      
       customerId = stripeCustomer.id
     }
 
