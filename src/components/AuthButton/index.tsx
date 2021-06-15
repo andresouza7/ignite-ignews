@@ -6,8 +6,6 @@ import { signIn, signOut, useSession } from "next-auth/client"
 export default function AuthButton() {
   const [session] = useSession()
 
-  console.log(session)
-
   return session ? (
     <button
       className={styles.authButton}
@@ -23,7 +21,7 @@ export default function AuthButton() {
       onClick={() => signIn("github")}
     >
       <FaGithub color="#eba417" />
-      Sign in with GitHub
+      Sign in with Github
     </button>
   )
 }
