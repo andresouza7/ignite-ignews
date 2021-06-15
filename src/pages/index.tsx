@@ -3,6 +3,7 @@ import Head from 'next/head'
 import styles from '../../styles/Home.module.scss'
 import SubscribeButton from '../components/SubscribeButton'
 import { stripe } from '../services/stripe'
+// index
 
 const formatPrice = (number) => new Intl.NumberFormat("pt-BR", {
   style: "currency",
