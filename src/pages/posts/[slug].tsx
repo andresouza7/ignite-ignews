@@ -43,7 +43,6 @@ interface UserSubscriptionSession extends Session {
 export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
   // check if user signed in
   const session: UserSubscriptionSession = await getSession({ req })
-  const { slug } = params
 
   console.log(session)
 
@@ -58,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   }
 
   const prismic = getPrismicClient(req)
-
+  const { slug } = params
   const response = await prismic.getByUID("post", String(slug), {})
 
   const post = {

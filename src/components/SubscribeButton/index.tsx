@@ -6,14 +6,14 @@ import { getStripeJs } from "../../services/stripe-js"
 import styles from "./styles.module.scss"
 
 interface SubscribeButtonProps {
-  priceId: string
+  priceId?: string
 }
 
 interface UserSubscriptionSession extends Session {
   activeSubscription?: any;
 }
 
-type SessionProps = [UserSubscriptionSession, boolean]
+export type SessionProps = [UserSubscriptionSession, boolean]
 
 export default function SubscribeButton({ priceId }: SubscribeButtonProps) {
   const [session]: SessionProps = useSession()
@@ -21,13 +21,11 @@ export default function SubscribeButton({ priceId }: SubscribeButtonProps) {
 
   async function handleSubscribe() {
     if (!session) {
-      signIn("github")
-      return
+      return signIn("github")
     }
 
     if (session?.activeSubscription) {
-      router.push("/posts")
-      return
+      return router.push("/posts")
     }
 
     try {
@@ -37,7 +35,7 @@ export default function SubscribeButton({ priceId }: SubscribeButtonProps) {
 
       const stripe = await getStripeJs()
 
-      await stripe.redirectToCheckout({sessionId})
+      await stripe.redirectToCheckout({ sessionId })
     } catch (error) {
       alert(error.message)
     }
