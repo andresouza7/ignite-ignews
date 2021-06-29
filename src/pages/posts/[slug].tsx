@@ -44,8 +44,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   // check if user signed in
   const session: UserSubscriptionSession = await getSession({ req })
 
-  console.log(session)
-
   // check if user has a subscription
   if (!session?.activeSubscription) {
     return {
@@ -60,15 +58,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
   const { slug } = params
   const response = await prismic.getByUID("post", String(slug), {})
 
-  const post = {
-    slug,
-    title: RichText.asText(response.data.title),
-    content: RichText.asHtml(response.data.content),
-    updatedAt: new Date(response.last_publication_date).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric"
-    })
+  let post = {}
+
+  if (response) {
+    post = {
+      slug,
+      title: RichText.asText(response.data.title),
+      content: RichText.asHtml(response.data.content),
+      updatedAt: new Date(response.last_publication_date).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      })
+    }
   }
 
   return {

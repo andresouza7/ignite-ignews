@@ -29,7 +29,9 @@ export default function PostPreview({ post }: PostPreviewProps) {
   const router = useRouter()
 
   useEffect(() => {
+    console.log(session)
     if (session?.activeSubscription) {
+      console.log(session)
       router.push(`/posts/${post.slug}`)
     }
   }, [])
@@ -75,15 +77,19 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const response = await prismic.getByUID("post", String(slug), {})
 
-  const post = {
-    slug,
-    title: RichText.asText(response.data.title),
-    content: RichText.asHtml(response.data.content.splice(0,2)),
-    updatedAt: new Date(response.last_publication_date).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric"
-    })
+  let post = {};
+
+  if (response) {
+    post = {
+      slug,
+      title: RichText.asText(response?.data.title),
+      content: RichText.asHtml(response?.data.content.splice(0, 2)),
+      updatedAt: new Date(response?.last_publication_date).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      })
+    }
   }
 
   return {
